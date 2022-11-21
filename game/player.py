@@ -2,7 +2,7 @@
 from re import I
 from game.ship import *
 from game.context import Context
-import jsonpickle
+# import jsonpickle
 from game.display import announce
 import game.config as config
 from game.items import *
