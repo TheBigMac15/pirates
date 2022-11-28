@@ -5,6 +5,8 @@ from game.display import announce
 from game.events import *
 from game.items import Cutlass
 from game.items import Flintlock
+from game.items import BowAndArrow
+
 
 class Island (location.Location):
 
@@ -65,6 +67,7 @@ class Trees (location.SubLocation):
         self.verbs['take'] = self
         self.item_in_tree = Cutlass()
         self.item_in_clothes = Flintlock()
+        self.item_in_ground = BowAndArrow()
 
         self.event_chance = 50
         self.events.append(man_eating_monkeys.ManEatingMonkeys())
@@ -85,6 +88,8 @@ class Trees (location.SubLocation):
             description = description + " You see a " + self.item_in_tree.name + " stuck in a tree."
         if self.item_in_clothes != None:
             description = description + " You see a " + self.item_in_clothes.name + " in a pile of shredded clothes on the forest floor."
+        if self.item_in_ground != None:
+            description = description + " You see a " + self.item_in_ground.name + "stuck in mud in the ground."
         announce (description)
     
     def process_verb (self, verb, cmd_list, nouns):
@@ -92,7 +97,7 @@ class Trees (location.SubLocation):
             config.the_player.next_loc = self.main_location.locations["beach"]
         #Handle taking items. Demo both "take cutlass" and "take all"
         if verb == "take":
-            if self.item_in_tree == None and self.item_in_clothes == None:
+            if self.item_in_tree == None and self.item_in_clothes == None and self.item_in_ground == None:
                 announce ("You don't see anything to take.")
             elif len(cmd_list) > 1:
                 at_least_one = False #Track if you pick up an item, print message if not.
@@ -108,6 +113,13 @@ class Trees (location.SubLocation):
                     announce ("You pick up the "+item.name+" out of the pile of clothes. ...It looks like someone was eaten here.")
                     config.the_player.add_to_inventory([item])
                     self.item_in_clothes = None
+                    config.the_player.go = True
+                    at_least_one = True
+                item = self.item_in_ground
+                if item != None and (cmd_list[1] == item.name or cmd_list[1] == "all"):
+                    announce("You pick up the "+item.name+" out of the mud. You clean it off and look at what you have found.")
+                    config.the_player.add_to_inventory([item])
+                    self.item_in_ground = None
                     config.the_player.go = True
                     at_least_one = True
                 if at_least_one == False:
