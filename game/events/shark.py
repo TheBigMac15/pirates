@@ -13,7 +13,8 @@ class Shark (event.Event):
         s = random.choice(config.the_player.get_pirates())
 #         msg = s.get_name() + "has been eaten by a shark"
         s.inflict_damage(self.sharkDamage,"has been eaten by a shark")
-        result["newevents"] = [ self ]
         result = {}
+        result["message"] = msg
+        result["newevents"] = [ self ]
         return result
         

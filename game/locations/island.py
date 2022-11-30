@@ -19,6 +19,8 @@ class Island (location.Location):
         self.locations = {}
         self.locations["beach"] = self.starting_location
         self.locations["trees"] = Trees(self)
+        self.locations["room1"] = room1(self)
+#         self.locations["room2"] = room2(self)
 
     def enter (self, ship):
         print ("arrived at an island")
@@ -50,7 +52,9 @@ class Beach_with_ship (location.SubLocation):
             config.the_player.visiting = False
         elif (verb == "north"):
             config.the_player.next_loc = self.main_location.locations["trees"]
-        elif (verb == "east" or verb == "west"):
+        elif (verb == "east"):
+            config.the_player.next_loc = self.main_location.locations["room1"]
+        elif (verb == "west"):
             announce ("You walk all the way around the island on the beach. It's not very interesting.")
 
 
@@ -124,3 +128,23 @@ class Trees (location.SubLocation):
                     at_least_one = True
                 if at_least_one == False:
                     announce ("You don't see one of those around.")
+class room1(location.SubLocation):
+    def __init__ (self, m):
+        super().__init__(m)
+        self.name = "room1"
+        self.verbs['north'] = self
+        self.verbs['south'] = self
+        self.verbs['east'] = self
+        self.verbs['west'] = self
+
+        # Include a couple of items and the ability to pick them up, for demo purposes
+        self.verbs['take'] = self
+        self.item_in_tree = Cutlass()
+        self.item_in_clothes = Flintlock()
+        self.item_in_ground = BowAndArrow()
+
+        self.event_chance = 50
+        self.events.append(lucky.LuckyDay())
+        
+# class room2(location.sublocation):
+    

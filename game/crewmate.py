@@ -28,6 +28,7 @@ class CrewMate(Context):
         self.skills["brawling"] = random.randrange(10,101)
         self.skills["swords"] = random.randrange(10,101)
         self.skills["guns"] = random.randrange(10,101)
+        self.skills["ranged"] = random.randrange(10,101)
         self.skills["cannons"] = random.randrange(10,101)
         self.skills["swimming"] = random.randrange(10,101)
 
@@ -35,6 +36,7 @@ class CrewMate(Context):
         self.items = []
         self.items.append(Cutlass())
         self.items.append(Flintlock())
+        self.items.append(BowAndArrow())
         self.powder = 32
 
         #Status effects

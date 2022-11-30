@@ -39,10 +39,10 @@ class Flintlock(Item):
         self.verb2 = "shoots"
 class BowAndArrow(Item):
     def __init__(self):
-        super().__init__("BowAndArrow",200)
+        super().__init__("Bow And Arrow",200)
         self.damage = (10,40)
         self.firearm = True
         self.charge = True #not sure what this means
-        self.skill = "rangedProjectile"
+        self.skill = "ranged"
         self.verb = "shoot"
         self.verb2 = "shoots"
