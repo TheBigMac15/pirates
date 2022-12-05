@@ -20,7 +20,7 @@ class Island (location.Location):
         self.locations["beach"] = self.starting_location
         self.locations["trees"] = Trees(self)
         self.locations["room1"] = room1(self)
-#         self.locations["room2"] = room2(self)
+        self.locations["room2"] = room2(self)
 
     def enter (self, ship):
         print ("arrived at an island")
@@ -146,5 +146,28 @@ class room1(location.SubLocation):
         self.event_chance = 50
         self.events.append(lucky.LuckyDay())
         
+    def enter(self):
+        announce ("You have entered the room")
+        
+    def process_verb (self, verb, cmd_list, nouns):
+        if (verb == "east"):
+            announce ("You find the entrance is locked. The only way for you to go is forward, which, by looking at your compass is North.")
+        if (verb == "north"):
+            announce ("You walk up to a door. The door is locked, but there is a riddle on the door. The riddle states, 'What can fly, but has no wings?'")
+            guessedCorrectly = False
+            while guessedCorrectly != True:
+                input() = userGuess
+                answer = 'Time'
+                if userGuess == answer:
+                    announce ("You have answered correctly. The door opens and you walk through")
+                    guessedCorrectly = True
+                elif userGuess != answer:
+                    announce ("You must guess again. The door did not open")
+                    gussedCorrectly = False
+            if guessedCorrectly = True:
+                config.the_player.next_loc = self.main_location.locations["room2"]
+
+
+
 # class room2(location.sublocation):
     
