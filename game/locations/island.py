@@ -1,12 +1,12 @@
 
 from game import location
 from game import config
-from game.display import announce
+from game.display import announce 
 from game.events import *
 from game.items import Cutlass
 from game.items import Flintlock
 from game.items import BowAndArrow
-
+ 
 
 class Island (location.Location):
 
@@ -75,7 +75,7 @@ class Trees (location.SubLocation):
 
         self.event_chance = 50
         self.events.append(man_eating_monkeys.ManEatingMonkeys())
-        self.events.append(drowned_pirates.DrownedPirates())
+#        self.events.append(drowned_pirates.DrownedPirates())
 
     def enter (self):
         edibles = False
@@ -136,15 +136,6 @@ class room1(location.SubLocation):
         self.verbs['south'] = self
         self.verbs['east'] = self
         self.verbs['west'] = self
-
-        # Include a couple of items and the ability to pick them up, for demo purposes
-        self.verbs['take'] = self
-        self.item_in_tree = Cutlass()
-        self.item_in_clothes = Flintlock()
-        self.item_in_ground = BowAndArrow()
-
-        self.event_chance = 50
-        self.events.append(lucky.LuckyDay())
         
     def enter(self):
         announce ("You have entered the room")
@@ -156,18 +147,30 @@ class room1(location.SubLocation):
             announce ("You walk up to a door. The door is locked, but there is a riddle on the door. The riddle states, 'What can fly, but has no wings?'")
             guessedCorrectly = False
             while guessedCorrectly != True:
-                input() = userGuess
+                userGuess = input()
                 answer = 'Time'
                 if userGuess == answer:
                     announce ("You have answered correctly. The door opens and you walk through")
                     guessedCorrectly = True
                 elif userGuess != answer:
                     announce ("You must guess again. The door did not open")
-                    gussedCorrectly = False
-            if guessedCorrectly = True:
+                    guessedCorrectly = False
+            if guessedCorrectly == True:
                 config.the_player.next_loc = self.main_location.locations["room2"]
 
 
 
-# class room2(location.sublocation):
-    
+class room2(location.SubLocation):
+    def __init__ (self, m):
+        super().__init__(m)
+        self.name = "room2"
+        self.verbs['north'] = self
+        self.verbs['south'] = self
+        self.verbs['east'] = self
+        self.verbs['west'] = self
+    def enter(self):
+        announce("You have entered the second room. Now to see what's inside")
+    def process_verb(self, verb,cmd_list, nouns):
+        if (verb == "east"):
+            announce("You walk forward. There appears to be a shimmering white light. You walk into the light. A screen appears in front of you. You must play a game of Wordle to advance.")
+            #play wordle code
