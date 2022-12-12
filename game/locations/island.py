@@ -212,7 +212,8 @@ class room3(location.SubLocation):
         announce("You have entered the third room.")
     def process_verb(self, verb,cmd_list, nouns):
         if (verb == "north"):
-            SkeletonAttack.SkeletonAttack()
+            atk = SkeletonAttack.SkeletonAttack()
+            atk.process("Island")
             config.the_player.next_loc = self.main_location.locations["room4"]
         if (verb == "west"):
             announce("The only way to go is north")
@@ -234,24 +235,26 @@ class room4(location.SubLocation):
     def enter(self):
         announce("You have entered the fourth room.")
         if self.item_in_the_chest != None:
-            description = " You see a " + self.item_in_the_chest.name + " stuck in a tree."
+            description = " You see a " + self.item_in_the_chest.name + " stuck halfway in a chest."
             announce (description)
     def process_verb(self, verb,cmd_list, nouns):
+        if (verb == "take"):
+            if self.item_in_the_chest == None:
+                announce ("You don't see anything to take.")
+            elif len(cmd_list) > 1:
+                at_least_one = False #Track if you pick up an item, print message if not.
+                item = self.item_in_the_chest
+                if item != None and (cmd_list[1] == item.name or cmd_list[1] == "all"):
+                    announce ("You take the "+item.name+" from the chest.")
+                    config.the_player.add_to_inventory([item])
+                    self.items.append(MagicalSword())
+                    self.item_in_the_chest = None
+                    config.the_player.go = True
+                    at_least_one = True
+                if at_least_one == False:
+                    announce ("You don't see one of those around.")
         if (verb == "west"):
-            announce ("You walk forwards.")
-            if (verb == "take"):
-                if self.item_in_the_chest == None:
-                    announce ("You don't see anything to take.")
-                elif len(cmd_list) > 1:
-                    at_least_one = False #Track if you pick up an item, print message if not.
-                    item = self.item_in_the_chest
-                    if item != None and (cmd_list[1] == item.name or cmd_list[1] == "all"):
-                        announce ("You take the "+item.name+" from the chest.")
-                        config.the_player.add_to_inventory([item])
-                        self.item_in_the_chest = None
-                        config.the_player.go = True
-                        if (verb == "west"):
-                            config.the_player.next_loc = self.main_location.locations["room5"]
+            config.the_player.next_loc = self.main_location.locations["room5"]
 
         if (verb == "north"):
             announce("The only way to go is west")
@@ -273,9 +276,10 @@ class room5(location.SubLocation):
     def process_verb(self, verb,cmd_list, nouns):
         if (verb == "west"):
             announce ("You walk forwards with your new magical sword.")
-            SkeletonAttack.SkeletonAttack()
-            if (verb == "west"):
-                announce("You run towards on open door. You are free!")
+            atk = SkeletonAttack.SkeletonAttack()
+            atk.process("Island")
+            if (verb == "free"):
+                announce("You run towards an open door. You are free!")
                 config.the_player.next_loc = self.main_location.locations["beach"]
 
 
