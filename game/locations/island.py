@@ -6,6 +6,7 @@ from game.events import *
 from game.items import Cutlass
 from game.items import Flintlock
 from game.items import BowAndArrow
+from game.items import MagicalSword
 from game import Wordle
 
 
@@ -193,7 +194,12 @@ class room2(location.SubLocation):
                     game.playGame()
             if gameOver == True:
                 config.the_player.next_loc = self.main_location.locations["room3"]
-                
+        if (verb == "west"):
+            announce("The only way to go is east")
+        if (verb == "north"):
+            announce("The only way to go is east")
+        if (verb == "south"):
+            announce("The only way to go is east")
 class room3(location.SubLocation):
     def __init__ (self, m):
         super().__init__(m)
@@ -208,6 +214,12 @@ class room3(location.SubLocation):
         if (verb == "north"):
             SkeletonAttack.SkeletonAttack()
             config.the_player.next_loc = self.main_location.locations["room4"]
+        if (verb == "west"):
+            announce("The only way to go is north")
+        if (verb == "east"):
+            announce("The only way to go is north")
+        if (verb == "south"):
+            announce("The only way to go is north")
 
 class room4(location.SubLocation):
     def __init__ (self, m):
@@ -217,11 +229,36 @@ class room4(location.SubLocation):
         self.verbs['south'] = self
         self.verbs['east'] = self
         self.verbs['west'] = self
+        self.verbs['take'] = self
+        self.item_in_the_chest = MagicalSword()
     def enter(self):
         announce("You have entered the fourth room.")
+        if self.item_in_the_chest != None:
+            description = " You see a " + self.item_in_the_chest.name + " stuck in a tree."
+            announce (description)
     def process_verb(self, verb,cmd_list, nouns):
         if (verb == "west"):
-            announce ("You walk forwards")
+            announce ("You walk forwards.")
+            if (verb == "take"):
+                if self.item_in_the_chest == None:
+                    announce ("You don't see anything to take.")
+                elif len(cmd_list) > 1:
+                    at_least_one = False #Track if you pick up an item, print message if not.
+                    item = self.item_in_the_chest
+                    if item != None and (cmd_list[1] == item.name or cmd_list[1] == "all"):
+                        announce ("You take the "+item.name+" from the chest.")
+                        config.the_player.add_to_inventory([item])
+                        self.item_in_the_chest = None
+                        config.the_player.go = True
+                        if (verb == "west"):
+                            config.the_player.next_loc = self.main_location.locations["room5"]
+
+        if (verb == "north"):
+            announce("The only way to go is west")
+        if (verb == "south"):
+            announce("The only way to go is west")
+        if (verb == "east"):
+            announce("The only way to go is west")
 
 class room5(location.SubLocation):
     def __init__ (self, m):
@@ -235,7 +272,12 @@ class room5(location.SubLocation):
         announce("You have entered the fifth room.")
     def process_verb(self, verb,cmd_list, nouns):
         if (verb == "west"):
-            announce ("You walk forwards")
+            announce ("You walk forwards with your new magical sword.")
+            SkeletonAttack.SkeletonAttack()
+            if (verb == "west"):
+                announce("You run towards on open door. You are free!")
+                config.the_player.next_loc = self.main_location.locations["beach"]
+
 
                     
 

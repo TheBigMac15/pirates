@@ -46,3 +46,10 @@ class BowAndArrow(Item):
         self.skill = "ranged"
         self.verb = "shoot"
         self.verb2 = "shoots"
+class MagicalSword(Item):
+    def __init__(self):
+        super().__init__("Magical Sword",10000000)
+        self.damage = 200
+        self.skill = "swords"
+        self.verb = "slash"
+        self.verb2 = "slashes"
