@@ -128,4 +128,12 @@ class Drowned(Monster):
         attacks["punch 2"] = ["punches",random.randrange(35,51), (1,10)]
         #7 to 19 hp, bite attack, 65 to 85 speed (100 is "normal")
         super().__init__(name, random.randrange(7,20), attacks, 75 + random.randrange(-10,11))
+        
+class Skeleton(Monster):
+    def __init__ (self,name):
+        attacks = {}
+        attacks["claw"] = ["claws",random.randrange(10,20), (5,15)]
+        attacks["rip"] = ["rips",random.randrange(10,20), (1,10)]
+        super().__init__(name, random.randrange(7,15), attacks, 75 + random.randrange(-10,11))
+
 

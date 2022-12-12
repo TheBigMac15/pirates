@@ -6,7 +6,8 @@ from game.events import *
 from game.items import Cutlass
 from game.items import Flintlock
 from game.items import BowAndArrow
- 
+from game import Wordle
+
 
 class Island (location.Location):
 
@@ -21,9 +22,13 @@ class Island (location.Location):
         self.locations["trees"] = Trees(self)
         self.locations["room1"] = room1(self)
         self.locations["room2"] = room2(self)
+        self.locations["room3"] = room3(self)
+        self.locations["room4"] = room4(self)
+        self.locations["room5"] = room5(self)
+
 
     def enter (self, ship):
-        print ("arrived at an island")
+        print ("You arrived at an island")
 
     def visit (self):
         config.the_player.location = self.starting_location
@@ -40,10 +45,10 @@ class Beach_with_ship (location.SubLocation):
         self.verbs['west'] = self
         self.event_chance = 50
         self.events.append (seagull.Seagull())
-        self.events.append(drowned_pirates.DrownedPirates())
+#        self.events.append(drowned_pirates.DrownedPirates())
 
     def enter (self):
-        announce ("arrive at the beach. Your ship is at anchor in a small bay to the south.")
+        announce ("You arrive at the beach. Your ship is at anchor in a small bay to the south.")
     
     def process_verb (self, verb, cmd_list, nouns):
         if (verb == "south"):
@@ -138,7 +143,7 @@ class room1(location.SubLocation):
         self.verbs['west'] = self
         
     def enter(self):
-        announce ("You have entered the room")
+        announce ("You have entered a room.")
         
     def process_verb (self, verb, cmd_list, nouns):
         if (verb == "east"):
@@ -157,7 +162,10 @@ class room1(location.SubLocation):
                     guessedCorrectly = False
             if guessedCorrectly == True:
                 config.the_player.next_loc = self.main_location.locations["room2"]
-
+        if (verb == "west"):
+            announce ("You look around. It appears the only place to go is north")
+        if (verb == "south"):
+            announce ("You look around. It appears the only place to go is north")
 
 
 class room2(location.SubLocation):
@@ -174,3 +182,60 @@ class room2(location.SubLocation):
         if (verb == "east"):
             announce("You walk forward. There appears to be a shimmering white light. You walk into the light. A screen appears in front of you. You must play a game of Wordle to advance.")
             #play wordle code
+            gameOver = False
+            while gameOver != True:
+                game = Wordle.Wordle()
+                game.playGame()
+                if game.gameWon == True:
+                    gameOver = True
+                elif game.gameLost == True:
+                    gameOver = False
+                    game.playGame()
+            if gameOver == True:
+                config.the_player.next_loc = self.main_location.locations["room3"]
+                
+class room3(location.SubLocation):
+    def __init__ (self, m):
+        super().__init__(m)
+        self.name = "room3"
+        self.verbs['north'] = self
+        self.verbs['south'] = self
+        self.verbs['east'] = self
+        self.verbs['west'] = self
+    def enter(self):
+        announce("You have entered the third room.")
+    def process_verb(self, verb,cmd_list, nouns):
+        if (verb == "north"):
+            SkeletonAttack.SkeletonAttack()
+            config.the_player.next_loc = self.main_location.locations["room4"]
+
+class room4(location.SubLocation):
+    def __init__ (self, m):
+        super().__init__(m)
+        self.name = "room4"
+        self.verbs['north'] = self
+        self.verbs['south'] = self
+        self.verbs['east'] = self
+        self.verbs['west'] = self
+    def enter(self):
+        announce("You have entered the fourth room.")
+    def process_verb(self, verb,cmd_list, nouns):
+        if (verb == "west"):
+            announce ("You walk forwards")
+
+class room5(location.SubLocation):
+    def __init__ (self, m):
+        super().__init__(m)
+        self.name = "room5"
+        self.verbs['north'] = self
+        self.verbs['south'] = self
+        self.verbs['east'] = self
+        self.verbs['west'] = self
+    def enter(self):
+        announce("You have entered the fifth room.")
+    def process_verb(self, verb,cmd_list, nouns):
+        if (verb == "west"):
+            announce ("You walk forwards")
+
+                    
+

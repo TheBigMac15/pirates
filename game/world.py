@@ -61,7 +61,7 @@ class World (Context):
 #         self.events.append (seagull.Seagull())
 #         self.events.append (seagull.Seagull())
         self.events.append (sickness.Sickness())
-        self.events.append (drowned_pirates.DrownedPirates())
+#        self.events.append (drowned_pirates.DrownedPirates())
         self.events.append (shark.Shark())
         self.nouns["world"] = self
 
